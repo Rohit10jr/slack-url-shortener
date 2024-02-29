@@ -2,16 +2,18 @@ from __future__ import annotations
 
 import importlib.util
 import os
+import socket
 import sys
 import typing as t
+import warnings
 from datetime import datetime
 from functools import lru_cache
 from functools import update_wrapper
+from threading import RLock
 
 import werkzeug.utils
 from werkzeug.exceptions import abort as _wz_abort
 from werkzeug.utils import redirect as _wz_redirect
-from werkzeug.wrappers import Response as BaseResponse
 
 from .globals import _cv_request
 from .globals import current_app
@@ -21,6 +23,7 @@ from .globals import session
 from .signals import message_flashed
 
 if t.TYPE_CHECKING:  # pragma: no cover
+    from werkzeug.wrappers import Response as BaseResponse
     from .wrappers import Response
 
 
@@ -48,7 +51,9 @@ def get_load_dotenv(default: bool = True) -> bool:
 
 
 def stream_with_context(
-    generator_or_function: t.Iterator[t.AnyStr] | t.Callable[..., t.Iterator[t.AnyStr]],
+    generator_or_function: (
+        t.Iterator[t.AnyStr] | t.Callable[..., t.Iterator[t.AnyStr]]
+    )
 ) -> t.Iterator[t.AnyStr]:
     """Request contexts disappear when the response is started on the server.
     This is done for efficiency reasons and to make it less likely to encounter
@@ -84,16 +89,16 @@ def stream_with_context(
     .. versionadded:: 0.9
     """
     try:
-        gen = iter(generator_or_function)  # type: ignore[arg-type]
+        gen = iter(generator_or_function)  # type: ignore
     except TypeError:
 
         def decorator(*args: t.Any, **kwargs: t.Any) -> t.Any:
-            gen = generator_or_function(*args, **kwargs)  # type: ignore[operator]
+            gen = generator_or_function(*args, **kwargs)  # type: ignore
             return stream_with_context(gen)
 
-        return update_wrapper(decorator, generator_or_function)  # type: ignore[arg-type]
+        return update_wrapper(decorator, generator_or_function)  # type: ignore
 
-    def generator() -> t.Iterator[t.AnyStr | None]:
+    def generator() -> t.Generator:
         ctx = _cv_request.get(None)
         if ctx is None:
             raise RuntimeError(
@@ -121,7 +126,7 @@ def stream_with_context(
     # real generator is executed.
     wrapped_g = generator()
     next(wrapped_g)
-    return wrapped_g  # type: ignore[return-value]
+    return wrapped_g
 
 
 def make_response(*args: t.Any) -> Response:
@@ -170,7 +175,7 @@ def make_response(*args: t.Any) -> Response:
         return current_app.response_class()
     if len(args) == 1:
         args = args[0]
-    return current_app.make_response(args)
+    return current_app.make_response(args)  # type: ignore
 
 
 def url_for(
@@ -386,7 +391,7 @@ def _prepare_send_file_kwargs(**kwargs: t.Any) -> dict[str, t.Any]:
 
 
 def send_file(
-    path_or_file: os.PathLike[t.AnyStr] | str | t.BinaryIO,
+    path_or_file: os.PathLike | str | t.BinaryIO,
     mimetype: str | None = None,
     as_attachment: bool = False,
     download_name: str | None = None,
@@ -487,7 +492,7 @@ def send_file(
 
     .. versionchanged:: 0.7
         MIME guessing and etag support for file-like objects was
-        removed because it was unreliable. Pass a filename if you are
+        deprecated because it was unreliable. Pass a filename if you are
         able to, otherwise attach an etag yourself.
 
     .. versionchanged:: 0.5
@@ -512,8 +517,8 @@ def send_file(
 
 
 def send_from_directory(
-    directory: os.PathLike[str] | str,
-    path: os.PathLike[str] | str,
+    directory: os.PathLike | str,
+    path: os.PathLike | str,
     **kwargs: t.Any,
 ) -> Response:
     """Send a file from within a directory using :func:`send_file`.
@@ -608,7 +613,82 @@ def get_root_path(import_name: str) -> str:
             )
 
     # filepath is import_name.py for a module, or __init__.py for a package.
-    return os.path.dirname(os.path.abspath(filepath))  # type: ignore[no-any-return]
+    return os.path.dirname(os.path.abspath(filepath))
+
+
+class locked_cached_property(werkzeug.utils.cached_property):
+    """A :func:`property` that is only evaluated once. Like
+    :class:`werkzeug.utils.cached_property` except access uses a lock
+    for thread safety.
+
+    .. deprecated:: 2.3
+        Will be removed in Flask 2.4. Use a lock inside the decorated function if
+        locking is needed.
+
+    .. versionchanged:: 2.0
+        Inherits from Werkzeug's ``cached_property`` (and ``property``).
+    """
+
+    def __init__(
+        self,
+        fget: t.Callable[[t.Any], t.Any],
+        name: str | None = None,
+        doc: str | None = None,
+    ) -> None:
+        import warnings
+
+        warnings.warn(
+            "'locked_cached_property' is deprecated and will be removed in Flask 2.4."
+            " Use a lock inside the decorated function if locking is needed.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        super().__init__(fget, name=name, doc=doc)
+        self.lock = RLock()
+
+    def __get__(self, obj: object, type: type = None) -> t.Any:  # type: ignore
+        if obj is None:
+            return self
+
+        with self.lock:
+            return super().__get__(obj, type=type)
+
+    def __set__(self, obj: object, value: t.Any) -> None:
+        with self.lock:
+            super().__set__(obj, value)
+
+    def __delete__(self, obj: object) -> None:
+        with self.lock:
+            super().__delete__(obj)
+
+
+def is_ip(value: str) -> bool:
+    """Determine if the given string is an IP address.
+
+    :param value: value to check
+    :type value: str
+
+    :return: True if string is an IP address
+    :rtype: bool
+
+    .. deprecated:: 2.3
+        Will be removed in Flask 2.4.
+    """
+    warnings.warn(
+        "The 'is_ip' function is deprecated and will be removed in Flask 2.4.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
+    for family in (socket.AF_INET, socket.AF_INET6):
+        try:
+            socket.inet_pton(family, value)
+        except OSError:
+            pass
+        else:
+            return True
+
+    return False
 
 
 @lru_cache(maxsize=None)
