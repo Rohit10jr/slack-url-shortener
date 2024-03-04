@@ -1,0 +1,32 @@
+Metadata-Version: 2.1
+Name: Tiny-URL
+Version: 1.0.1
+Summary: this is an tiny url Python wrapper
+Home-page: https://github.com/minato37103710/Tiny-url-Wrapper
+Author: orarange
+Author-email: arigatoudane@outlook.jp
+License: UNKNOWN
+Project-URL: Bug Tracker, https://github.com/minato37103710/Tiny-url-Wrapper/issues
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Tiny-URL-Wrapper
+This repository is an API wrapper made in Python for Tiny-URL.
+
+# Usage
+```python
+from tiny_url import Tiny
+
+url = "https://www.google.com"
+t = Tiny.make_url(url)
+print(t)
+```
+
+`Copyright (c) 2022 minato37103710`
+
+
