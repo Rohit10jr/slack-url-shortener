@@ -71,27 +71,18 @@ def is_valid_url(text):
         return url
 
 def valid_url(text):
-    if text is None:
-        print("Text is None.")
-        return None
-    pattern = re.compile(r'^<?(https?://)[^>]*>?')
-    return bool(pattern.match(text))
+    url_pattern = re.compile(
+        r'^(https?|ftp)://'  # Scheme (http, https, or ftp)
+        r'([A-Za-z0-9.-]+)'  # Domain
+        r'(:\d+)?'           # Port (optional)
+        r'(/[^\s]*)?$'       # Path (optional)
+    )
+    match_result = re.match(url_pattern, text)
 
-    # url_pattern = re.compile(
-    #     r'^(https?|ftp)://'  # Scheme (http, https, or ftp)
-    #     # r'([A-Za-z0-9.-]+)'  # Domain
-    #     # r'(:\d+)?'           # Port (optional)
-    #     # r'(/[^\s]*)?$'       # Path (optional)
-    # )
-    # match_result = re.match(url_pattern, text)
-
-    # if match_result:
-    #     # url = original_link(text)
-    #     print(f"valid_url if block: {text}")
-    #     return True
-    # else:
-    #     print(f"valid_url else block: {text}")
-    #     return None
+    if match_result:
+        url = original_link(url)
+        return url
+    return None
 
 def check_url(text):
     print(text)
@@ -109,29 +100,28 @@ def message(payload):
     text = event.get('text')
     # original_url = valid_url(text)
     print(f"text: {text}")
-    # original_url = is_valid_url(text)
-    if valid_url(text):
-        original_url = original_link(text)
-        print(f"original url: {original_url}")
+    original_url = valid_url(text)
+    # original_url = original_link(text)
+    print(f"original url: {original_url}")
 
-        if user_id != BOT_ID and original_url:
-            oldurl = Link.query.filter_by(original_url=original_url).first()
-            # print(oldurl.short_url)
-            if not oldurl:
-                short_url = short_link()
-                print(f"short url: {short_url}")
-                link = Link(original_url=original_url, short_url=short_url)
-                db.session.add(link)
-                db.session.commit()
-                text = f"https://c864-106-222-220-55.ngrok-free.app/{short_url}" 
-                client.chat_postMessage(
-                        channel=channel_id, text=text)
-            else:
-                short_url = oldurl.short_url
-                print(f"short_url: {short_url}")
-                text = f"https://c864-106-222-220-55.ngrok-free.app /{short_url}" 
-                client.chat_postMessage(
-                        channel=channel_id, text=text)
+    if user_id != BOT_ID and original_url:
+        oldurl = Link.query.filter_by(original_url=original_url).first()
+        # print(oldurl.short_url)
+        if not oldurl:
+            short_url = short_link()
+            print(f"short url: {short_url}")
+            link = Link(original_url=original_url, short_url=short_url)
+            db.session.add(link)
+            db.session.commit()
+            text = f"https://3c4a-106-222-220-55.ngrok-free.app/{short_url}" 
+            client.chat_postMessage(
+                    channel=channel_id, text=text)
+        else:
+            short_url = oldurl.short_url
+            print(f"short_url: {short_url}")
+            text = f"https://3c4a-106-222-220-55.ngrok-free.app/{short_url}" 
+            client.chat_postMessage(
+                    channel=channel_id, text=text)
 
 
 @app.route("/<short_url>")
