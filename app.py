@@ -34,6 +34,7 @@ slack_event_adapter = SlackEventAdapter(os.environ['SIGNING_SECRET'], '/slack/ev
 client = slack.WebClient(token=os.environ['SLACK_TOKEN'])
 BOT_ID = client.api_call("auth.test")['user_id']
 
+slack_description = "Hi i am url shortener bot!\nInstall this app in any Slack channel.\nSimply paste the long URL that you want to shorten.\nThis app will automatically generate short urls for you.\nOnce the short URL is generated, Copy the short URL and share it with others."
 # model
 class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -123,13 +124,13 @@ def message(payload):
                 link = Link(original_url=original_url, short_url=short_url)
                 db.session.add(link)
                 db.session.commit()
-                text = f"https://c864-106-222-220-55.ngrok-free.app/{short_url}" 
+                text = f"https://06aa-106-222-223-198.ngrok-free.app/{short_url}" 
                 client.chat_postMessage(
                         channel=channel_id, text=text)
             else:
                 short_url = oldurl.short_url
                 print(f"short_url: {short_url}")
-                text = f"https://c864-106-222-220-55.ngrok-free.app /{short_url}" 
+                text = f"https://06aa-106-222-223-198.ngrok-free.app/{short_url}" 
                 client.chat_postMessage(
                         channel=channel_id, text=text)
 
@@ -150,7 +151,7 @@ def command():
     data = request.form
 
     if data["command"] == "/shorturl":
-        message = "hi i am url shortener bot!"
+        message = slack_description
     else:
         message = f"Invalid command: {data['command']}"
 
@@ -159,14 +160,31 @@ def command():
 
 
 # html 
-@app.route("/model")
+@app.route("/list")
 def model():
     model = Link.query.all()
     return render_template('list.html', model = model)
 
-@app.route("/")
+@app.route("/", methods=['GET','POST'])
 def main():
+    if request.method=='POST':
+        url = request.form['user_input']
+        if valid_url(url):
+            original_url = original_link(url)
+            oldurl = Link.query.filter_by(original_url=original_url).first()
+            if not oldurl:
+                short_url = short_link()
+                link = Link(original_url=original_url, short_url=short_url)
+                db.session.add(link)
+                db.session.commit()        
+                return render_template('main.html', text=f"http://127.0.0.1:5000/{short_url}")
+            return render_template('main.html', text=f"http://127.0.0.1:5000/{oldurl.short_url}")
+        return render_template("main.html", text="Not a Valid URL!, Please enter a valid URL.")
     return render_template("main.html")
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
 
 if __name__ == "__main__":
     app.run(debug=True)

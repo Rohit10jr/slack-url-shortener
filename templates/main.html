@@ -1,11 +1,53 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="../static/style.css"> 
+
 </head>
 <body>
-    hello
+
+    <header>
+        <h1>URL Shortener</h1>
+    </header>
+
+    <main>
+        <!-- Paste the URL to be shortened -->
+    <div class="main-container">
+        <div class="inner-div uppper-div">
+            <form action="/" method="post">
+                <label for="user_input" style="font-size: 20px;">Enter your URL:</label>
+                <input type="text" class="user_input" id="user_input" name="user_input" placeholder="Enter your Link here" required>
+                <button class=submitbtn type="submit">Submit</button>
+            </form>
+        </div>
+        <div class="inner-div lower-div">
+            {% if text %}
+                {% if text.startswith('http://') or text.startswith('https://') %}
+                <p style="font-size: 18px; font-style:  Arial, sans-serif;">your short url: <a href="{{ text }}">{{ text }}</a></p>
+                <!-- <p>http://127.0.0.1:5000/{{ text }}</p> -->
+                {% else %}
+                <p style="font-size: 18px; font-style:  Arial, sans-serif;">Warning: {{ text }}</p>
+                {% endif %}
+
+            {% else %}
+            <p>
+                <b>Paste the URL to be shortened</b><br>
+
+                Simply paste the long URL that you want to shorten.<br>
+                This app will automatically generate short URLs for you.<br>
+                URL shortener allows to create a shortened link making it easy to share<br>
+                Once the short URL is generated, copy the short URL and share it with others.
+            </p>
+            {% endif %}
+        </div>
+    </div>
+
+    </main>
+
+
 </body>
 </html>
