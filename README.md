@@ -66,34 +66,29 @@ pip install -r requirements.txt
 
 4. now go to basic information, fetch your signing secret, and paste it into your dot env(.env) file.
 
-
+![Screenshot (618)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/571ba5b4-5f7d-42fd-8e96-ce8cc4999dd0)
 
 5. navigate to the OAuth & Permissions feature, copy your slack token, and paste it into your dot env(.env) file.
 
-![Screenshot (630)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/da2dbd57-2743-436f-92d9-f46188d4fb34)
+![Screenshot (619)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/077d7120-1e40-446b-b181-0fc0b3718464)
 
 6. Then at OAuth & Permissions scroll down to Bot Token Scopes. Add all these scopes to your Slack app.
 
-![Screenshot (628)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/a60d1e80-2628-43a7-ac1e-4573dd603be9)
+![Screenshot (620)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/a2b65e0b-bc4e-463b-b81a-6dba161ea2a9)
 
 7. Now navigate to event subscriptions, and add the link you want the post request to be sent whenever an event occurs.
 
-
+![Screenshot (621)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/63c05ad9-a809-4e6f-90c1-54cd807b62a6)
 
 8. Go to the Slash Commands feature. Click on the Create New Command button.
 
-
+![Screenshot (630)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/da2dbd57-2743-436f-92d9-f46188d4fb34)
 
 9. After completing these installations and configurations, now update your project file with the necessary tokens and routes.
 
-
 ![Screenshot (622)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/3c809399-4629-4f17-ba20-906db26686ad)
 
-![Screenshot (618)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/571ba5b4-5f7d-42fd-8e96-ce8cc4999dd0)
-
-![Screenshot (619)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/077d7120-1e40-446b-b181-0fc0b3718464)
-![Screenshot (620)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/a2b65e0b-bc4e-463b-b81a-6dba161ea2a9)
-![Screenshot (621)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/63c05ad9-a809-4e6f-90c1-54cd807b62a6)
+![Screenshot (628)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/a60d1e80-2628-43a7-ac1e-4573dd603be9)
 
 ## Usage
 wrtewrgq wewqefwefqwef
