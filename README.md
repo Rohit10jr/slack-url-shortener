@@ -2,7 +2,6 @@
 ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
-![Visual Studio Code](https://img.shields.io/badge/Visual%20Studio%20Code-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
 
 ## Demo 
 
@@ -55,20 +54,19 @@ pip install -r requirements.txt
 
 1. First create and Sign in to your Slack account and create a new workspace.
 
-![Screenshot (623)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/3e2d16ff-a9d2-43e8-a1af-1b2cff3e119f)
-
+![Screenshot (624)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/53f885ed-c6b7-4ef8-ad90-353bf04bb860)
 
 2. Now open another browser tab and head to slack API site, click on the create your own app button.
 
-![Screenshot (624)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/53f885ed-c6b7-4ef8-ad90-353bf04bb860)
+![Screenshot (627)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/2470e87f-28f8-440a-9d24-dd5e683570c9)
 
 3. After that choose the option to create an app from scratch, and select the workspace you want.
 
-![Screenshot (627)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/2470e87f-28f8-440a-9d24-dd5e683570c9)
+![Screenshot (628)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/0516a4c7-6ff9-4be5-aee8-1166defb60fb)
 
 4. now go to basic information, fetch your signing secret, and paste it into your dot env(.env) file.
 
-![Screenshot (628)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/0516a4c7-6ff9-4be5-aee8-1166defb60fb)
+
 
 5. navigate to the OAuth & Permissions feature, copy your slack token, and paste it into your dot env(.env) file.
 
@@ -87,6 +85,15 @@ pip install -r requirements.txt
 
 
 9. After completing these installations and configurations, now update your project file with the necessary tokens and routes.
+
+
+![Screenshot (622)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/3c809399-4629-4f17-ba20-906db26686ad)
+
+![Screenshot (618)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/571ba5b4-5f7d-42fd-8e96-ce8cc4999dd0)
+
+![Screenshot (619)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/077d7120-1e40-446b-b181-0fc0b3718464)
+![Screenshot (620)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/a2b65e0b-bc4e-463b-b81a-6dba161ea2a9)
+![Screenshot (621)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/63c05ad9-a809-4e6f-90c1-54cd807b62a6)
 
 ## Usage
 wrtewrgq wewqefwefqwef
