@@ -1,20 +1,12 @@
-import os, re
-import re
-import json
-import slack
-import string
-import random
-import validators
-# import datetime
+import os, re, slack, string, random
+import datetime, validators, json
 from datetime import datetime
 import requests  
 from pathlib import Path
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify, redirect, abort, render_template
 from slackeventsapi import SlackEventAdapter
-import pyshorteners
 from flask_sqlalchemy import SQLAlchemy
-# workspace = slack url shortener, App = short urls, channel = test
 
 app = Flask(__name__)
 
@@ -35,6 +27,7 @@ client = slack.WebClient(token=os.environ['SLACK_TOKEN'])
 BOT_ID = client.api_call("auth.test")['user_id']
 
 slack_description = "Hi i am url shortener bot!\nInstall this app in any Slack channel.\nSimply paste the long URL that you want to shorten.\nThis app will automatically generate short urls for you.\nOnce the short URL is generated, Copy the short URL and share it with others."
+
 # model
 class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -49,8 +42,9 @@ class Link(db.Model):
 with app.app_context():
     db.create_all()
 
-
-# functions
+# ----------------functions----------------
+    
+# function to generate unique short urls 
 def short_link(length=6):
     characters = string.ascii_letters + string.digits
     while True:
@@ -59,6 +53,7 @@ def short_link(length=6):
         if not url:
             return shorturl
 
+# function to remove <> from url 
 def original_link(url):
     if url is not None and url.startswith("<") and url.endswith(">"):
         return url[1:-1]
@@ -71,6 +66,7 @@ def is_valid_url(text):
         url = original_link(text)
         return url
 
+# function to find if its url or not
 def valid_url(text):
     if text is None:
         print("Text is None.")
@@ -78,26 +74,9 @@ def valid_url(text):
     pattern = re.compile(r'^<?(https?://)[^>]*>?')
     return bool(pattern.match(text))
 
-    # url_pattern = re.compile(
-    #     r'^(https?|ftp)://'  # Scheme (http, https, or ftp)
-    #     # r'([A-Za-z0-9.-]+)'  # Domain
-    #     # r'(:\d+)?'           # Port (optional)
-    #     # r'(/[^\s]*)?$'       # Path (optional)
-    # )
-    # match_result = re.match(url_pattern, text)
-
-    # if match_result:
-    #     # url = original_link(text)
-    #     print(f"valid_url if block: {text}")
-    #     return True
-    # else:
-    #     print(f"valid_url else block: {text}")
-    #     return None
-
+# funtion to check 
 def check_url(text):
-    print(text)
     if valid_url(text):
-        print(text)
         return original_link(text)
     return None
 
@@ -108,20 +87,14 @@ def message(payload):
     channel_id = event.get('channel')
     user_id = event.get('user')
     text = event.get('text')
-    # original_url = valid_url(text)
-    print(f"text: {text}")
     host_url = request.url_root
-    # original_url = is_valid_url(text)
     if valid_url(text):
         original_url = original_link(text)
-        print(f"original url: {original_url}")
 
         if user_id != BOT_ID and original_url:
             oldurl = Link.query.filter_by(original_url=original_url).first()
-            # print(oldurl.short_url)
             if not oldurl:
                 short_url = short_link()
-                print(f"short url: {short_url}")
                 link = Link(original_url=original_url, short_url=short_url)
                 db.session.add(link)
                 db.session.commit()
@@ -130,23 +103,22 @@ def message(payload):
                         channel=channel_id, text=text)
             else:
                 short_url = oldurl.short_url
-                print(f"short_url: {short_url}")
                 text = f"{host_url}{short_url}" 
                 client.chat_postMessage(
                         channel=channel_id, text=text)
-
-
+                
+# route to redierct to original url from the shortened one
 @app.route("/<short_url>")
 def redirect_url(short_url):
     link = Link.query.filter_by(short_url=short_url).first()
     if link:
         original_url = link.original_url
-        print(original_url)
+        # print(original_url)
         return redirect(original_url)
     else:
         return abort(404) 
 
-
+# slack command handler
 @app.route("/slack/command/", methods=["POST"])
 def command():
     data = request.form
@@ -160,12 +132,15 @@ def command():
     return ({"text": message})
 
 
-# html 
+# ----------------functions for url shortener site----------------
+
+# route to show every stored links
 @app.route("/list")
 def model():
     model = Link.query.all()
     return render_template('list.html', model = model)
 
+# home page route
 @app.route("/", methods=['GET','POST'])
 def main():
     if request.method=='POST':
@@ -184,6 +159,7 @@ def main():
         return render_template("main.html", text="Not a Valid URL!, Please enter a valid URL.")
     return render_template("main.html")
 
+# route to handle 404 
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html'), 404
