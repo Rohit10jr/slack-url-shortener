@@ -110,6 +110,7 @@ def message(payload):
     text = event.get('text')
     # original_url = valid_url(text)
     print(f"text: {text}")
+    host_url = request.url_root
     # original_url = is_valid_url(text)
     if valid_url(text):
         original_url = original_link(text)
@@ -124,13 +125,13 @@ def message(payload):
                 link = Link(original_url=original_url, short_url=short_url)
                 db.session.add(link)
                 db.session.commit()
-                text = f"https://06aa-106-222-223-198.ngrok-free.app/{short_url}" 
+                text = f"{host_url}{short_url}"
                 client.chat_postMessage(
                         channel=channel_id, text=text)
             else:
                 short_url = oldurl.short_url
                 print(f"short_url: {short_url}")
-                text = f"https://06aa-106-222-223-198.ngrok-free.app/{short_url}" 
+                text = f"{host_url}{short_url}" 
                 client.chat_postMessage(
                         channel=channel_id, text=text)
 
@@ -169,6 +170,7 @@ def model():
 def main():
     if request.method=='POST':
         url = request.form['user_input']
+        host_url = request.url_root
         if valid_url(url):
             original_url = original_link(url)
             oldurl = Link.query.filter_by(original_url=original_url).first()
@@ -177,8 +179,8 @@ def main():
                 link = Link(original_url=original_url, short_url=short_url)
                 db.session.add(link)
                 db.session.commit()        
-                return render_template('main.html', text=f"http://127.0.0.1:5000/{short_url}")
-            return render_template('main.html', text=f"http://127.0.0.1:5000/{oldurl.short_url}")
+                return render_template('main.html', text=f"{host_url}{short_url}")
+            return render_template('main.html', text=f"{host_url}{oldurl.short_url}")
         return render_template("main.html", text="Not a Valid URL!, Please enter a valid URL.")
     return render_template("main.html")
 

@@ -1,2 +1,3 @@
+logic.py
 .env
-*.txt
+features.txt
