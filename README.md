@@ -86,10 +86,6 @@ pip install -r requirements.txt
 
 9. After completing these installations and configurations, now update your project file with the necessary tokens and routes.
 
-![Screenshot (622)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/3c809399-4629-4f17-ba20-906db26686ad)
-
-![Screenshot (628)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/a60d1e80-2628-43a7-ac1e-4573dd603be9)
-
 ## Usage
 wrtewrgq wewqefwefqwef
 
