@@ -82,7 +82,7 @@ pip install -r requirements.txt
 
 ![Screenshot (621)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/63c05ad9-a809-4e6f-90c1-54cd807b62a6)
 
-8. Navigate to the "Slash Commands" feature and create a new command, Configure the command settings asper your wish.
+8. Navigate to the "Slash Commands" feature and create a new command, Configure the command settings as per your wish.
 
 ![Screenshot (630)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/da2dbd57-2743-436f-92d9-f46188d4fb34)
 
