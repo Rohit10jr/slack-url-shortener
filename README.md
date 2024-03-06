@@ -3,6 +3,8 @@
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
 
+This is a Slack URL Shortener app. This app automatically detects long URLs posted in your Slack channels and instantly generates concise short URLs, Now, easily share links without cluttering your messages and enjoy quick access to important resources. Simplify your communication with the Slack URL Shortener app and say goodbye to lengthy URLs.
+
 ## Demo 
 
 slack URL shortener app demonstration gif.
@@ -35,7 +37,7 @@ Follow these steps to get your Slack URL Shortener up and running:
 
 1. Clone the repository:
 ```
-git clone https://github.com/Rohit10jr/Ecommerce-site.git
+https://github.com/Rohit10jr/slack-url-shortener.git
 ```  
 2. Create a virtual environment and activate it:
 ```
@@ -52,42 +54,43 @@ pip install -r requirements.txt
 
 ## Configuration
 
-1. First create and Sign in to your Slack account and create a new workspace.
+1. Begin by creating a Slack account on the Slack website, then Sign in to your Slack account and create a new workspace.
 
 ![Screenshot (624)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/53f885ed-c6b7-4ef8-ad90-353bf04bb860)
 
-2. Now open another browser tab and head to slack API site, click on the create your own app button.
+2. Now Open a new browser tab and navigate to the Slack API site, click on the "Create your own app" button.
 
 ![Screenshot (627)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/2470e87f-28f8-440a-9d24-dd5e683570c9)
 
-3. After that choose the option to create an app from scratch, and select the workspace you want.
+3. After that Select the option to create an app from scratch, and choose the desired workspace you want.
 
 ![Screenshot (628)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/0516a4c7-6ff9-4be5-aee8-1166defb60fb)
 
-4. now go to basic information, fetch your signing secret, and paste it into your dot env(.env) file.
+4. Now go to "Basic information", fetch your signing secret, and securely store it in your dotenv(.env) file.
 
 ![Screenshot (618)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/571ba5b4-5f7d-42fd-8e96-ce8cc4999dd0)
 
-5. navigate to the OAuth & Permissions feature, copy your slack token, and paste it into your dot env(.env) file.
+5. Navigate to the "OAuth & Permissions" feature, copy your slack token, and paste it into your .env file.
 
 ![Screenshot (619)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/077d7120-1e40-446b-b181-0fc0b3718464)
 
-6. Then at OAuth & Permissions scroll down to Bot Token Scopes. Add all these scopes to your Slack app.
+6. Then at "OAuth & Permissions" scroll down to Bot Token Scopes, and add these required scopes for your Slack app.
 
 ![Screenshot (620)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/a2b65e0b-bc4e-463b-b81a-6dba161ea2a9)
 
-7. Now navigate to event subscriptions, and add the link you want the post request to be sent whenever an event occurs.
+7. In the "Event Subscriptions", add the desired link to receive POST requests for events.
 
 ![Screenshot (621)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/63c05ad9-a809-4e6f-90c1-54cd807b62a6)
 
-8. Go to the Slash Commands feature. Click on the Create New Command button.
+8. Navigate to the "Slash Commands" feature and create a new command, Configure the command settings asper your wish.
 
 ![Screenshot (630)](https://github.com/Rohit10jr/slack-url-shortener/assets/130643902/da2dbd57-2743-436f-92d9-f46188d4fb34)
 
-9. After completing these installations and configurations, now update your project file with the necessary tokens and routes.
+9. After completing these installations and configurations update all necessary tokens and routes. Now, your Slack URL Shortener app is configured and ready for use!
 
 ## Usage
-wrtewrgq wewqefwefqwef
+
+This app automatically detects long URLs posted in your Slack channels and instantly generates concise short URLs, this app helps for sharing cleaner and more manageable URLs within your Slack workspace. Simplify your communication with the Slack URL Shortener app.
 
 ## Contributions
 
